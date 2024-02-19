@@ -2,42 +2,65 @@ const fs = require("fs");
 const path = require('path');
 const inquirer = require("inquirer");
 const generateMarkdown = require("./utils/generateMarkdown");
+const license = require("./license");
 
-// array of questions for user
+
+
 const questions = [
-    {type: 'input',
-    message: 'What is your name?',
-    name: 'name',},
+    {
+        type: 'input',
+        message: 'What is your name?',
+        name: 'name',
+    },
+    {
+        type: 'input',
+        message: 'What is your project name?',
+        name: 'project',
+    },
+    {
+        type: 'input',
+        message: 'Where are you located?',
+        name: 'location',
+    },
+    {
+        type: 'input',
+        message: 'What is your GitHub name?',
+        name: 'github',
+    },
+    {
+        type: 'checkbox',
+        choices: ["html", "css", "javascript", "python"],
+        name: 'language',
+        message: 'What languages do you know?',
+    },
+    {
+        type: 'list',
+        message: 'What is your preferred method of communication?',
+        name: 'comms',
+        choices: ["email", "phone", "text", "shouting really loud"],
+    },
 
-    {type: 'input',
-    message: 'What is your project name?',
-    name: 'project',},
+    {
+        type: 'input',
+        message: 'What is does youre app do?',
+        name: 'function',
+    },
 
-    {type: 'input',
-    message: 'where are you located?',
-    name: 'location',},
-    
-    {type: 'input',
-    message: 'What is your github name?',
-    name: 'github',},
-
-    {type: 'checkbox',
-    choices: ["html","css","javascript", "python"],
-    name: 'langudage',
-    message: 'What languages do you know?',
-},
-
-    {type: 'list',
-    message: 'What is your preferred method of communication?',
-    name: 'comms',
-    choices: ["email","phone","text", "shouting really loud"],},
-
-
+    {
+        type: 'input',
+        message: 'why is youre app useful?',
+        name: 'use',
+    },
+    {
+        type: 'input',
+        message: 'how do you install youre app?',
+        name: 'install',
+    },
 ];
 
 // function to write README file
 function writeToFile(fileName, data) {
-    fs.writeFile(readme.md, process.argv[2], (err) => {
+    fs.writeFile(fileName, data, (err) => {
         if (err) {
             console.error(err);
         } else {
@@ -48,7 +71,15 @@ function writeToFile(fileName, data) {
 
 // function to initialize program
 function init() {
-
+    inquirer
+        .prompt(questions)
+        .then((answers) => {
+            const readmeContent = generateMarkdown(answers); // Assuming you have a function to generate the markdown content
+            writeToFile('Readme.md', readmeContent);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 }
 
 // function call to initialize program
