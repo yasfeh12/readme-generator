@@ -13,21 +13,20 @@ how many words is this? Having a README file for every project is crucial for se
 * [Questions](#questions)
 
 ## Installation
-
 install by clicking download.
 
 ## Usage
-This is for free use in any case. 
+free for any useage 
 
 ## License
-![License Badge](https://img.shields.io/badge/license-MIT-brightgreen)
-This application is covered under the MIT license.
+![License Badge](https://img.shields.io/badge/license-GPL-brightgreen)
+This application is covered under the GPL license.
 
 ## Contributing
 N/A
 
 ## Tests
-this program was tested reigirously on nodejs, for furthere testing or feedback contact yaseen via [GitHub](https://github.com/yasfeh12) or email at yaseenfehad@gmail.com.
+this program was tested reigirously on nodejs, for furthere testing or feedback contact yaseen via GitHub or email at yaseenfehad@gmail.com.
 
 ## Questions
 If you have any additional questions, feel free to contact yaseen via [GitHub](https://github.com/yasfeh12) or email at yaseenfehad@gmail.com.
