@@ -1,6 +1,5 @@
-const fs = require("fs");
-const inquirer = require("inquirer");
-const generateMarkdown = require("./utils/generateMarkdown");
+const fs = require('fs');
+const inquirer = require('inquirer');
 
 const questions = [
     {
@@ -56,40 +55,40 @@ const questions = [
     },
 ];
 
-function generateMarkdown(userInput ) {
+function generateREADME(userInput) {
     return `
-    # ${userInput.project}
-    
-    ## Description
-    ${userInput.description}
-    
-    ## Table of Contents
-    * [Installation](#installation)
-    * [Usage](#usage)
-    * [License](#license)
-    * [Contributing](#contributing)
-    * [Tests](#tests)
-    * [Questions](#questions)
-    
-    ## Installation
-    ${userInput.installation}
-    
-    ## Usage
-    ${userInput.usage}
-    
-    ## License
-    ${generateLicenseBadge(userInput.license)}
-    ${getLicenseNotice(userInput.license)}
-    
-    ## Contributing
-    ${userInput.contributing}
-    
-    ## Tests
-    ${userInput.tests}
-    
-    ## Questions
-    If you have any additional questions, feel free to contact ${userInput.name} via [GitHub](https://github.com/${userInput.github}) or email at ${userInput.email}.
-    `;
+# ${userInput.project}
+
+## Description
+${userInput.description}
+
+## Table of Contents
+* [Installation](#installation)
+* [Usage](#usage)
+* [License](#license)
+* [Contributing](#contributing)
+* [Tests](#tests)
+* [Questions](#questions)
+
+## Installation
+${userInput.installation}
+
+## Usage
+${userInput.usage}
+
+## License
+${generateLicenseBadge(userInput.license)}
+${getLicenseNotice(userInput.license)}
+
+## Contributing
+${userInput.contributing}
+
+## Tests
+${userInput.tests}
+
+## Questions
+If you have any additional questions, feel free to contact ${userInput.name} via [GitHub](https://github.com/${userInput.github}) or email at ${userInput.email}.
+`;
 }
 function generateLicenseBadge(licenseType) {
     return `![License Badge](https://img.shields.io/badge/license-${licenseType}-brightgreen)`;
@@ -100,20 +99,16 @@ function getLicenseNotice(licenseType) {
 }
 
 function init() {
-    inquirer
-        .prompt(questions)
-        .then((answers) => {
-          
-            const licenseBadge = generateLicenseBadge(answers.license);
-            
-         
-            const readmeContent = generateMarkdown(answers, generateTableOfContents(), licenseBadge);
-            
-            writeToFile('Readme.md', readmeContent);
-        })
-        .catch((error) => {
-            console.error(error);
+    inquirer.prompt(questions).then((answers) => {
+        const readmeContent = generateREADME(answers);
+        fs.writeFile('README.md', readmeContent, (err) => {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log('README.md successfully generated!');
+            }
         });
+    });
 }
 
 init();
