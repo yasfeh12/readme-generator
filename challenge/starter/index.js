@@ -1,8 +1,6 @@
 const fs = require("fs");
-const path = require('path');
 const inquirer = require("inquirer");
 const generateMarkdown = require("./utils/generateMarkdown");
-const license = require("./license");
 
 const questions = [
     {
@@ -17,119 +15,89 @@ const questions = [
     },
     {
         type: 'input',
-        message: 'Where are you located?',
-        name: 'location',
+        message: 'Enter a project description:',
+        name: 'description',
     },
     {
         type: 'input',
-        message: 'What is your GitHub name?',
-        name: 'github',
-    },
-    {
-        type: 'checkbox',
-        choices: ["html", "css", "javascript", "python"],
-        name: 'language',
-        message: 'What languages do you know?',
+        message: 'Enter installation instructions:',
+        name: 'installation',
     },
     {
         type: 'input',
-        message: 'Do you have any tests for your application?',
-        name: 'tests',
+        message: 'Enter usage information:',
+        name: 'usage',
     },
     {
         type: 'list',
-        message: 'What is your preferred method of communication?',
-        name: 'comms',
-        choices: ["email", "phone", "text", "shouting really loud"],
-    },
-
-    {
-        type: 'input',
-        message: 'What is does youre app do?',
-        name: 'function',
+        message: 'Choose a license for your application:',
+        name: 'license',
+        choices: ['MIT', 'Apache', 'GPL', 'None'],
     },
     {
         type: 'input',
-        message: 'What is your email?',
+        message: 'Enter contribution guidelines:',
+        name: 'contributing',
+    },
+    {
+        type: 'input',
+        message: 'Enter test instructions:',
+        name: 'tests',
+    },
+    {
+        type: 'input',
+        message: 'What is your GitHub username?',
+        name: 'github',
+    },
+    {
+        type: 'input',
+        message: 'What is your email address?',
         name: 'email',
     },
-
-    {
-        type: 'input',
-        message: 'why is youre app useful?',
-        name: 'use',
-    },
-    {
-        type: 'input',
-        message: 'how do you install youre app?',
-        name: 'install',
-    },
-
-   
 ];
 
-function generateMarkdown(userInput, tableOfContents, licenseBadge) {
+function generateMarkdown(userInput ) {
     return `
-# ${userInput.project}
-
-## Description
-${userInput.function}
-
-## Table of Contents
-${tableOfContents}
-
-## Installation
-${userInput.install}
-
-## Usage
-${userInput.use}
-
-## License
-${licenseBadge}
-
-## Contributing
-${userInput.name} is located in ${userInput.location}. You can reach out to them via ${userInput.comms} or find more about them on their [GitHub profile](https://github.com/${userInput.github}).
-
-## Tests
-${userInput.tests}
-
-## Questions
-If you have any additional questions, feel free to contact ${userInput.name} via email at ${userInput.email}.
-`;
+    # ${userInput.project}
+    
+    ## Description
+    ${userInput.description}
+    
+    ## Table of Contents
+    * [Installation](#installation)
+    * [Usage](#usage)
+    * [License](#license)
+    * [Contributing](#contributing)
+    * [Tests](#tests)
+    * [Questions](#questions)
+    
+    ## Installation
+    ${userInput.installation}
+    
+    ## Usage
+    ${userInput.usage}
+    
+    ## License
+    ${generateLicenseBadge(userInput.license)}
+    ${getLicenseNotice(userInput.license)}
+    
+    ## Contributing
+    ${userInput.contributing}
+    
+    ## Tests
+    ${userInput.tests}
+    
+    ## Questions
+    If you have any additional questions, feel free to contact ${userInput.name} via [GitHub](https://github.com/${userInput.github}) or email at ${userInput.email}.
+    `;
 }
-
-function generateTableOfContents() {
-
-    return `
-* [Description](#description)
-* [Table of Contents](#table-of-contents)
-* [Installation](#installation)
-* [Usage](#usage)
-* [License](#license)
-* [Contributing](#contributing)
-* [Tests](#tests)
-* [Questions](#questions)
-`;
-}
-
 function generateLicenseBadge(licenseType) {
-
-    return `![License Badge](URL_TO_LICENSE_BADGE)`;
+    return `![License Badge](https://img.shields.io/badge/license-${licenseType}-brightgreen)`;
 }
 
-module.exports = generateMarkdown;
-
-
-function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, (err) => {
-        if (err) {
-            console.error(err);
-        } else {
-            console.log('Success!');
-        }
-    });
+function getLicenseNotice(licenseType) {
+    return `This application is covered under the ${licenseType} license.`;
 }
-
 
 function init() {
     inquirer
