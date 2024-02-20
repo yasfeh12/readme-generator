@@ -4,8 +4,6 @@ const inquirer = require("inquirer");
 const generateMarkdown = require("./utils/generateMarkdown");
 const license = require("./license");
 
-
-
 const questions = [
     {
         type: 'input',
@@ -34,6 +32,11 @@ const questions = [
         message: 'What languages do you know?',
     },
     {
+        type: 'input',
+        message: 'Do you have any tests for your application?',
+        name: 'tests',
+    },
+    {
         type: 'list',
         message: 'What is your preferred method of communication?',
         name: 'comms',
@@ -44,6 +47,11 @@ const questions = [
         type: 'input',
         message: 'What is does youre app do?',
         name: 'function',
+    },
+    {
+        type: 'input',
+        message: 'What is your email?',
+        name: 'email',
     },
 
     {
@@ -56,9 +64,62 @@ const questions = [
         message: 'how do you install youre app?',
         name: 'install',
     },
+
+   
 ];
 
-// function to write README file
+function generateMarkdown(userInput, tableOfContents, licenseBadge) {
+    return `
+# ${userInput.project}
+
+## Description
+${userInput.function}
+
+## Table of Contents
+${tableOfContents}
+
+## Installation
+${userInput.install}
+
+## Usage
+${userInput.use}
+
+## License
+${licenseBadge}
+
+## Contributing
+${userInput.name} is located in ${userInput.location}. You can reach out to them via ${userInput.comms} or find more about them on their [GitHub profile](https://github.com/${userInput.github}).
+
+## Tests
+${userInput.tests}
+
+## Questions
+If you have any additional questions, feel free to contact ${userInput.name} via email at ${userInput.email}.
+`;
+}
+
+function generateTableOfContents() {
+
+    return `
+* [Description](#description)
+* [Table of Contents](#table-of-contents)
+* [Installation](#installation)
+* [Usage](#usage)
+* [License](#license)
+* [Contributing](#contributing)
+* [Tests](#tests)
+* [Questions](#questions)
+`;
+}
+
+function generateLicenseBadge(licenseType) {
+
+    return `![License Badge](URL_TO_LICENSE_BADGE)`;
+}
+
+module.exports = generateMarkdown;
+
+
 function writeToFile(fileName, data) {
     fs.writeFile(fileName, data, (err) => {
         if (err) {
@@ -69,12 +130,17 @@ function writeToFile(fileName, data) {
     });
 }
 
-// function to initialize program
+
 function init() {
     inquirer
         .prompt(questions)
         .then((answers) => {
-            const readmeContent = generateMarkdown(answers); // Assuming you have a function to generate the markdown content
+          
+            const licenseBadge = generateLicenseBadge(answers.license);
+            
+         
+            const readmeContent = generateMarkdown(answers, generateTableOfContents(), licenseBadge);
+            
             writeToFile('Readme.md', readmeContent);
         })
         .catch((error) => {
@@ -82,5 +148,4 @@ function init() {
         });
 }
 
-// function call to initialize program
 init();
